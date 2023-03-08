@@ -31,3 +31,28 @@ jobs:
           ASUNA_UPLOAD_KEY: ${{ secrets.ASUNA_UPLOAD_KEY }}
           COVERAGEPY_COMMAND: coverage run test.py
 
+      - name: Store coverage.md and asuna.md in environment file
+        shell: bash
+        run: |
+          echo "ASUNA_MD<<EOF" >> $GITHUB_ENV
+          echo $(cat asuna.md) >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "COVERAGE_MD<<EOF" >> $GITHUB_ENV
+          echo $(cat coverage.md) >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Comment on pull request or update old comment
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ github.event.number }}
+          body: |
+            ## 🧪️Coverage Report
+
+            ${{ env.ASUNA_MD }}
+
+            ${{ env.COVERAGE_MD }}
+
+            ---------------------------------------
+            <sub><sup>🗡️ Generate report by [Asuna](https://asuna.helloyeew.dev)</sup></sub>
+          reactions: rocket
