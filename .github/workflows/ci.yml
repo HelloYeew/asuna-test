@@ -27,7 +27,7 @@ jobs:
 
       - name: Test and upload coverage to Asuna
         # Use workflow code on the main branch
-        uses: HelloYeew/asuna-coveragepy-action@main
+        uses: HelloYeew/asuna-coveragepy-action@v.1.1
         with:
           ASUNA_UPLOAD_KEY: ${{ secrets.ASUNA_UPLOAD_KEY }}
           COVERAGEPY_COMMAND: coverage run test.py
